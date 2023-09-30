@@ -10,39 +10,46 @@ public class JohnBall : MonoBehaviour
     // Start is called before the first frame update
     Rigidbody2D rb;
     AudioSource audioSource;
-    bool isStarted, manualStartEnabled;
+    SpaceTextScript spaceText;
+    bool isStarted, manualStartEnabled, gameEnded;
     void Start()
     {
         isStarted = false;
         manualStartEnabled = true;
+        gameEnded = false;
         audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody2D>();
+        spaceText = FindObjectOfType<SpaceTextScript>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space) && !isStarted && manualStartEnabled)
+        if (!gameEnded)
         {
-            startJohnBall();
-            manualStartEnabled = false;
-        }
-
-        if(isStarted)
-        {
-            if (rb.velocity.x < 10.0f && rb.velocity.x > -10.0f)
+            if (Input.GetKey(KeyCode.Space) && !isStarted && manualStartEnabled)
             {
-                if (rb.velocity.x > 0.0f)
+                startJohnBall();
+                manualStartEnabled = false;
+                spaceText.hide();
+                Debug.Log("hidden");
+            }
+
+            if (isStarted)
+            {
+                if (rb.velocity.x < 10.0f && rb.velocity.x > -10.0f)
                 {
-                    rb.velocity = new Vector2(10.0f, rb.velocity.y);
-                }
-                else
-                {
-                    rb.velocity = new Vector2(-10.0f, rb.velocity.y);
+                    if (rb.velocity.x > 0.0f)
+                    {
+                        rb.velocity = new Vector2(10.0f, rb.velocity.y);
+                    }
+                    else
+                    {
+                        rb.velocity = new Vector2(-10.0f, rb.velocity.y);
+                    }
                 }
             }
         }
-        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -55,7 +62,10 @@ public class JohnBall : MonoBehaviour
         isStarted = false;
         rb.velocity = Vector2.zero;
         rb.position = Vector2.zero;
-        StartCoroutine(Waiter());
+        if (!manualStartEnabled)
+        {
+            StartCoroutine(Waiter());
+        }
     }
 
     IEnumerator Waiter()
@@ -75,5 +85,15 @@ public class JohnBall : MonoBehaviour
             rb.velocity = new Vector2(-10.0f, 0.0f);
         }
         isStarted = true;
+    }
+
+    public void setManualStart(bool manualStartEnabled)
+    {
+        this.manualStartEnabled = manualStartEnabled;
+    }
+
+    public void setGameEnded(bool gameEnded)
+    {
+        this.gameEnded = gameEnded;
     }
 }

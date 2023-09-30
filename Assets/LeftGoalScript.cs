@@ -5,10 +5,12 @@ using UnityEngine;
 public class LeftGoalScript : MonoBehaviour
 {
     JohnBall johnball;
+    ScoreMaster scoreMaster;
     // Start is called before the first frame update
     void Start()
     {
         johnball = FindObjectOfType<JohnBall>();
+        scoreMaster = FindObjectOfType<ScoreMaster>();
     }
 
     // Update is called once per frame
@@ -19,7 +21,7 @@ public class LeftGoalScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        ScoreMaster.updateScore("right");
+        scoreMaster.updateScore("right");
         johnball.resetJohnBall();
     }
 }

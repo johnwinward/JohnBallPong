@@ -3,20 +3,28 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class LeftScoreScript : MonoBehaviour
+public class SpaceTextScript : MonoBehaviour
 {
     TMP_Text text;
-    ScoreMaster scoreMaster;
     // Start is called before the first frame update
     void Start()
     {
         text = GetComponent<TMP_Text>();
-        scoreMaster = FindObjectOfType<ScoreMaster>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        text.text = scoreMaster.leftScore.ToString();
+        
+    }
+
+    public void hide()
+    {
+        text.text = string.Empty;
+    }
+
+    public void show()
+    {
+        text.text = "Press SPACE to start.";
     }
 }
